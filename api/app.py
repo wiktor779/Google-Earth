@@ -3,21 +3,21 @@ from absl import app, logging
 import cv2
 import numpy as np
 import tensorflow as tf
-from yolov3_tf2.models import (
+from api.yolov3_tf2.models import (
     YoloV3, YoloV3Tiny
 )
-from yolov3_tf2.dataset import transform_images, load_tfrecord_dataset
-from yolov3_tf2.utils import draw_outputs
+from api.yolov3_tf2.dataset import transform_images, load_tfrecord_dataset
+from api.yolov3_tf2.utils import draw_outputs
 from flask import Flask, request, Response, jsonify, send_from_directory, abort
 import os
 
 # customize your API through the following parameters
-classes_path = './data/labels/coco.names'
+classes_path = './data/labels/model.names'
 weights_path = './weights/yolov3.tf'
 tiny = False                    # set to True if using a Yolov3 Tiny model
 size = 416                      # size images are resized to for model
 output_path = './detections/'   # path to output folder where images with detections are saved
-num_classes = 80                # number of classes in model
+num_classes = 1                # number of classes in model
 
 # load in weights and classes
 physical_devices = tf.config.experimental.list_physical_devices('GPU')
