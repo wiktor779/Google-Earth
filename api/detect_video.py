@@ -3,11 +3,11 @@ from absl import app, flags, logging
 from absl.flags import FLAGS
 import cv2
 import tensorflow as tf
-from api.yolov3_tf2.models import (
+from yolov3_tf2.models import (
     YoloV3, YoloV3Tiny
 )
-from api.yolov3_tf2.dataset import transform_images
-from api.yolov3_tf2.utils import draw_outputs
+from yolov3_tf2.dataset import transform_images
+from yolov3_tf2.utils import draw_outputs
 
 
 flags.DEFINE_string('classes', './data/labels/coco.names', 'path to classes file')

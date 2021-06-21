@@ -1,14 +1,13 @@
 import time
-from absl import app, logging
 import cv2
 import numpy as np
 import tensorflow as tf
-from api.yolov3_tf2.models import (
+from yolov3_tf2.models import (
     YoloV3, YoloV3Tiny
 )
-from api.yolov3_tf2.dataset import transform_images, load_tfrecord_dataset
-from api.yolov3_tf2.utils import draw_outputs
-from flask import Flask, request, Response, jsonify, send_from_directory, abort
+from yolov3_tf2.dataset import transform_images, load_tfrecord_dataset
+from yolov3_tf2.utils import draw_outputs
+from flask import Flask, request, Response, jsonify, send_from_directory, abort, render_template
 import os
 
 # customize your API through the following parameters
@@ -36,10 +35,14 @@ class_names = [c.strip() for c in open(classes_path).readlines()]
 print('classes loaded')
 
 # Initialize Flask application
-app = Flask(__name__)
+application = Flask(__name__)
+
+@application.route('/', methods=['GET'])
+def home():
+    return render_template('index.html')
 
 # API that returns JSON with classes found in images
-@app.route('/detections', methods=['POST'])
+@application.route('/detections', methods=['POST'])
 def get_detections():
     raw_images = []
     images = request.files.getlist("images")
@@ -97,7 +100,7 @@ def get_detections():
         abort(404)
 
 # API that returns image with detections on it
-@app.route('/image', methods= ['POST'])
+@application.route('/image', methods= ['POST'])
 def get_image():
     image = request.files["images"]
     image_name = image.filename
@@ -133,5 +136,6 @@ def get_image():
         return Response(response=response, status=200, mimetype='image/png')
     except FileNotFoundError:
         abort(404)
+
 if __name__ == '__main__':
-    app.run(debug=True, host = '0.0.0.0', port=5000)
+    application.run(debug=True)
