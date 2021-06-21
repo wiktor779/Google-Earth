@@ -35,11 +35,15 @@ class_names = [c.strip() for c in open(classes_path).readlines()]
 print('classes loaded')
 
 # Initialize Flask application
-application = Flask(__name__)
+application = Flask(__name__, static_folder='templates/')
 
 @application.route('/', methods=['GET'])
 def home():
     return render_template('index.html')
+
+@application.route('/house-detector', methods=['GET'])
+def house_detector():
+    return render_template('house-detector.html')
 
 # API that returns JSON with classes found in images
 @application.route('/detections', methods=['POST'])
