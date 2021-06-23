@@ -111,9 +111,11 @@ def get_detections():
 @application.route('/image', methods= ['POST'])
 def get_image():
     ip = request.headers.get('X-Real-IP')
+    if not ip:
+        ip = 'unrecognized'
     print(ip)
     now = datetime.now()
-    dt_string = now.strftime("%d_%m_%Y_%H_%M_%S")
+    dt_string = now.strftime("%Y_%m_%d_%H_%M_%S")
     image = request.files["images"]
     image_name = image.filename
     image.save(os.path.join(os.getcwd(), image_name))
@@ -134,7 +136,7 @@ def get_image():
                                         np.array(boxes[0][i])))
     img = cv2.cvtColor(img_raw.numpy(), cv2.COLOR_RGB2BGR)
     img = draw_outputs(img, (boxes, scores, classes, nums), class_names)
-    output_filename = 'ip_' + ip + 'dt_' + dt_string + '.jpg'
+    output_filename ='dt_' + dt_string +  'ip_' + ip + '.jpg'
     cv2.imwrite(output_path + output_filename, img)
     print('output saved to: {}'.format(output_path + output_filename))
     
