@@ -110,7 +110,8 @@ def get_detections():
 # API that returns image with detections on it
 @application.route('/image', methods= ['POST'])
 def get_image():
-    ip = request.remote_addr
+    ip = request.headers.get('X-Real-IP')
+    print(ip)
     now = datetime.now()
     dt_string = now.strftime("%d_%m_%Y_%H_%M_%S")
     image = request.files["images"]
